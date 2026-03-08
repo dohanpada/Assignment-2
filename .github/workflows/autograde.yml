@@ -1,6 +1,6 @@
 name: Autograde
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   grade:
@@ -44,7 +44,7 @@ jobs:
       ####################################################
 
       - name: Hidden Test - Move Command
-        id: hidden-move
+        id: hidden_move
         uses: education/autograding-command-grader@v1
         with:
           test-name: "Hidden: Move Command"
@@ -67,7 +67,7 @@ jobs:
           max-score: 2
 
       - name: Hidden Test - Alter Command
-        id: hidden-alter-field
+        id: hidden_alter_field
         uses: education/autograding-command-grader@v1
         with:
           test-name: "Hidden: Alter Command"
@@ -89,7 +89,7 @@ jobs:
           max-score: 2
 
       - name: Hidden Test - Unique Ticket IDs
-        id: hidden-unique-ids
+        id: hidden_unique_ids
         uses: education/autograding-command-grader@v1
         with:
           test-name: "Hidden: Unique Ticket IDs"
@@ -113,7 +113,7 @@ jobs:
           max-score: 3
 
       - name: Hidden Test - No Duplicate on Move
-        id: hidden-no-dup
+        id: hidden_no_dup
         uses: education/autograding-command-grader@v1
         with:
           test-name: "Hidden: No Duplicate on Move"
@@ -135,7 +135,7 @@ jobs:
           max-score: 3
 
       - name: Hidden Test - Command Sequence
-        id: hidden-sequence
+        id: hidden_sequence
         uses: education/autograding-command-grader@v1
         with:
           test-name: "Hidden: Command Sequence"
@@ -158,7 +158,7 @@ jobs:
           max-score: 3
 
       - name: Hidden Test - Audit Log Integrity
-        id: hidden-audit
+        id: hidden_audit
         uses: education/autograding-command-grader@v1
         with:
           test-name: "Hidden: Audit Log Integrity"
@@ -181,7 +181,7 @@ jobs:
           max-score: 2
 
       - name: Hidden Test - Alter Title
-        id: hidden-alter
+        id: hidden_alter
         uses: education/autograding-command-grader@v1
         with:
           test-name: "Hidden: Alter Title"
@@ -203,7 +203,7 @@ jobs:
           max-score: 2
 
       - name: Hidden Test - Multiple Commands
-        id: hidden-multiple
+        id: hidden_multiple
         uses: education/autograding-command-grader@v1
         with:
           test-name: "Hidden: Multiple Commands"
@@ -231,23 +231,13 @@ jobs:
         env:
           STRUCTURE_RESULTS: "${{steps.structure.outputs.result}}"
           WORKFLOW_RESULTS: "${{steps.workflow.outputs.result}}"
-          HIDDEN_MOVE_RESULTS: "${{steps.hidden-move.outputs.result}}"
-          HIDDEN_ALTER_FIELD_RESULTS: "${{steps.hidden-alter-field.outputs.result}}"
-          HIDDEN_UNIQUE_RESULTS: "${{steps.hidden-unique-ids.outputs.result}}"
-          HIDDEN_NODUP_RESULTS: "${{steps.hidden-no-dup.outputs.result}}"
-          HIDDEN_SEQ_RESULTS: "${{steps.hidden-sequence.outputs.result}}"
-          HIDDEN_AUDIT_RESULTS: "${{steps.hidden-audit.outputs.result}}"
-          HIDDEN_ALTER_RESULTS: "${{steps.hidden-alter.outputs.result}}"
-          HIDDEN_MULT_RESULTS: "${{steps.hidden-multiple.outputs.result}}"
+          HIDDEN_MOVE_RESULTS: "${{steps.hidden_move.outputs.result}}"
+          HIDDEN_ALTER_FIELD_RESULTS: "${{steps.hidden_alter_field.outputs.result}}"
+          HIDDEN_UNIQUE_IDS_RESULTS: "${{steps.hidden_unique_ids.outputs.result}}"
+          HIDDEN_NO_DUP_RESULTS: "${{steps.hidden_no_dup.outputs.result}}"
+          HIDDEN_SEQUENCE_RESULTS: "${{steps.hidden_sequence.outputs.result}}"
+          HIDDEN_AUDIT_RESULTS: "${{steps.hidden_audit.outputs.result}}"
+          HIDDEN_ALTER_RESULTS: "${{steps.hidden_alter.outputs.result}}"
+          HIDDEN_MULTIPLE_RESULTS: "${{steps.hidden_multiple.outputs.result}}"
         with:
-          runners: >-
-            structure,
-            workflow,
-            hidden-move,
-            hidden-alter-field,
-            hidden-unique-ids,
-            hidden-no-dup,
-            hidden-sequence,
-            hidden-audit,
-            hidden-alter,
-            hidden-multiple
+          runners: "structure,workflow,hidden_move,hidden_alter_field,hidden_unique_ids,hidden_no_dup,hidden_sequence,hidden_audit,hidden_alter,hidden_multiple"
