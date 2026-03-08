@@ -190,3 +190,4 @@ Your submission is automatically graded when you push to GitHub. The grading pip
 - [Maven in 5 Minutes](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html) — The build tool used in this project
 - [User Stories (Atlassian)](https://www.atlassian.com/agile/project-management/user-stories) — What user stories are
 - [User Stories (Agile Alliance)](https://agilealliance.org/glossary/user-stories/) — Agile methodology overview
+- [Software Development Board example](https://gemini.google.com/share/7e1779fd9b8c) — A simple interactive example of a software development board
