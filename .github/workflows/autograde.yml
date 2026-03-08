@@ -28,56 +28,111 @@ jobs:
           test-name: "Structure"
           command: "mvn -B -Dtest=workflow.StructureTests test"
           timeout: 2
-          max-score: 6
+          max-score: 8
 
-      - name: Create Command Tests
-        id: create-command
+      - name: Workflow Tests
+        id: workflow
         uses: education/autograding-command-grader@v1
         with:
-          test-name: "Create Command"
-          command: "mvn -B -Dtest=workflow.CreateCommandTests test"
-          timeout: 2
-          max-score: 1
-
-      - name: Move Command Tests
-        id: move-command
-        uses: education/autograding-command-grader@v1
-        with:
-          test-name: "Move Command"
-          command: "mvn -B -Dtest=workflow.MoveCommandTests test"
-          timeout: 2
-          max-score: 2
-
-      - name: Alter Command Tests
-        id: alter-command
-        uses: education/autograding-command-grader@v1
-        with:
-          test-name: "Alter Command"
-          command: "mvn -B -Dtest=workflow.AlterCommandTests test"
-          timeout: 2
-          max-score: 1
-
-      - name: Audit Log Tests
-        id: audit-log
-        uses: education/autograding-command-grader@v1
-        with:
-          test-name: "Audit Log"
-          command: "mvn -B -Dtest=workflow.AuditLogTests test"
-          timeout: 2
-          max-score: 1
-
-      - name: Robustness Tests
-        id: robustness
-        uses: education/autograding-command-grader@v1
-        with:
-          test-name: "Robustness"
-          command: "mvn -B -Dtest=workflow.RobustnessTests test"
+          test-name: "Workflow"
+          command: "mvn -B -Dtest=workflow.WorkflowTests test"
           timeout: 2
           max-score: 2
 
       ####################################################
       # Hidden Tests
       ####################################################
+
+      - name: Hidden Test - Move Command
+        id: hidden-move
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: "Hidden: Move Command"
+          setup-command: |
+            cat << 'EOF' > HiddenMoveTest.java
+            import workflow.*;
+            public class HiddenMoveTest {
+              public static void main(String[] args) {
+                WorkflowBoard board = new WorkflowBoard();
+                new CreateCommand(board,"Test").performCommand();
+                new MoveCommand(board,1,Status.IN_PROGRESS).performCommand();
+                if(board.getToDoTickets().size() != 0) { System.exit(1); }
+                if(board.getInProgressTickets().size() != 1) { System.exit(1); }
+              }
+            }
+            EOF
+            javac -cp target/classes HiddenMoveTest.java
+          command: java -cp target/classes:. HiddenMoveTest
+          timeout: 2
+          max-score: 2
+
+      - name: Hidden Test - Alter Command
+        id: hidden-alter-field
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: "Hidden: Alter Command"
+          setup-command: |
+            cat << 'EOF' > HiddenAlterFieldTest.java
+            import workflow.*;
+            public class HiddenAlterFieldTest {
+              public static void main(String[] args) {
+                WorkflowBoard board = new WorkflowBoard();
+                new CreateCommand(board,"Test").performCommand();
+                new AlterCommand(board,1,"priority","High").performCommand();
+                if(!"High".equals(board.getTicketById(1).getPriority())) { System.exit(1); }
+              }
+            }
+            EOF
+            javac -cp target/classes HiddenAlterFieldTest.java
+          command: java -cp target/classes:. HiddenAlterFieldTest
+          timeout: 2
+          max-score: 2
+
+      - name: Hidden Test - Unique Ticket IDs
+        id: hidden-unique-ids
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: "Hidden: Unique Ticket IDs"
+          setup-command: |
+            cat << 'EOF' > HiddenUniqueIdTest.java
+            import workflow.*;
+            public class HiddenUniqueIdTest {
+              public static void main(String[] args) {
+                WorkflowBoard board = new WorkflowBoard();
+                new CreateCommand(board,"A").performCommand();
+                new CreateCommand(board,"B").performCommand();
+                Ticket t1 = board.getTicketById(1);
+                Ticket t2 = board.getTicketById(2);
+                if(t1 == null || t2 == null || t1 == t2) { System.exit(1); }
+              }
+            }
+            EOF
+            javac -cp target/classes HiddenUniqueIdTest.java
+          command: java -cp target/classes:. HiddenUniqueIdTest
+          timeout: 2
+          max-score: 3
+
+      - name: Hidden Test - No Duplicate on Move
+        id: hidden-no-dup
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: "Hidden: No Duplicate on Move"
+          setup-command: |
+            cat << 'EOF' > HiddenNoDupTest.java
+            import workflow.*;
+            public class HiddenNoDupTest {
+              public static void main(String[] args) {
+                WorkflowBoard board = new WorkflowBoard();
+                new CreateCommand(board,"Test").performCommand();
+                new MoveCommand(board,1,"In Progress").performCommand();
+                if(board.getInProgressTickets().size() != 1) { System.exit(1); }
+              }
+            }
+            EOF
+            javac -cp target/classes HiddenNoDupTest.java
+          command: java -cp target/classes:. HiddenNoDupTest
+          timeout: 2
+          max-score: 3
 
       - name: Hidden Test - Command Sequence
         id: hidden-sequence
@@ -102,7 +157,7 @@ jobs:
           timeout: 2
           max-score: 3
 
-      - name: Hidden Test - Audit Log
+      - name: Hidden Test - Audit Log Integrity
         id: hidden-audit
         uses: education/autograding-command-grader@v1
         with:
@@ -110,7 +165,6 @@ jobs:
           setup-command: |
             cat << 'EOF' > HiddenAuditTest.java
             import workflow.*;
-  
             public class HiddenAuditTest {
               public static void main(String[] args) {
                 WorkflowBoard board = new WorkflowBoard();
@@ -120,17 +174,17 @@ jobs:
                 if(board.getAuditLog().size() < 3) { System.exit(1); }
               }
             }
-            EOF  
+            EOF
             javac -cp target/classes HiddenAuditTest.java
           command: java -cp target/classes:. HiddenAuditTest
           timeout: 2
-          max-score: 3
+          max-score: 2
 
-      - name: Hidden Test - Alter Command
+      - name: Hidden Test - Alter Title
         id: hidden-alter
         uses: education/autograding-command-grader@v1
         with:
-          test-name: "Hidden: Alter Command Behavior"
+          test-name: "Hidden: Alter Title"
           setup-command: |
             cat << 'EOF' > HiddenAlterTest.java
             import workflow.*;
@@ -138,7 +192,7 @@ jobs:
               public static void main(String[] args) {
                 WorkflowBoard board = new WorkflowBoard();
                 new CreateCommand(board,"Old Title").performCommand();
-                new AlterCommand(board, 1, "New Title").performCommand(); 
+                new AlterCommand(board, 1, "title", "New Title").performCommand();
                 if(!board.getTicketById(1).getTitle().equals("New Title")) { System.exit(1); }
               }
             }
@@ -146,7 +200,7 @@ jobs:
             javac -cp target/classes HiddenAlterTest.java
           command: java -cp target/classes:. HiddenAlterTest
           timeout: 2
-          max-score: 3
+          max-score: 2
 
       - name: Hidden Test - Multiple Commands
         id: hidden-multiple
@@ -176,14 +230,14 @@ jobs:
         if: always()
         env:
           STRUCTURE_RESULTS: "${{steps.structure.outputs.result}}"
-          CREATE_RESULTS: "${{steps.create-command.outputs.result}}"
-          MOVE_RESULTS: "${{steps.move-command.outputs.result}}"
-          ALTER_RESULTS: "${{steps.alter-command.outputs.result}}"
-          AUDIT_RESULTS: "${{steps.audit-log.outputs.result}}"
-          ROBUST_RESULTS: "${{steps.robustness.outputs.result}}"
+          WORKFLOW_RESULTS: "${{steps.workflow.outputs.result}}"
+          HIDDEN_MOVE_RESULTS: "${{steps.hidden-move.outputs.result}}"
+          HIDDEN_ALTER_FIELD_RESULTS: "${{steps.hidden-alter-field.outputs.result}}"
+          HIDDEN_UNIQUE_RESULTS: "${{steps.hidden-unique-ids.outputs.result}}"
+          HIDDEN_NODUP_RESULTS: "${{steps.hidden-no-dup.outputs.result}}"
           HIDDEN_SEQ_RESULTS: "${{steps.hidden-sequence.outputs.result}}"
           HIDDEN_AUDIT_RESULTS: "${{steps.hidden-audit.outputs.result}}"
           HIDDEN_ALTER_RESULTS: "${{steps.hidden-alter.outputs.result}}"
           HIDDEN_MULT_RESULTS: "${{steps.hidden-multiple.outputs.result}}"
         with:
-          runners: "structure,create-command,move-command,alter-command,audit-log,robustness,hidden-sequence,hidden-audit,hidden-alter,hidden-multiple"
+          runners: "structure,workflow,hidden-move,hidden-alter-field,hidden-unique-ids,hidden-no-dup,hidden-sequence,hidden-audit,hidden-alter,hidden-multiple"

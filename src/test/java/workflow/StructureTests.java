@@ -53,4 +53,20 @@ public class StructureTests {
         );
     }
 
+    @Test
+    public void moveCommandExtendsAbstract() {
+        assertEquals(
+                AbstractWorkflowCommand.class,
+                MoveCommand.class.getSuperclass()
+        );
+    }
+
+    @Test
+    public void alterCommandExtendsAbstract() {
+        assertEquals(
+                AbstractWorkflowCommand.class,
+                AlterCommand.class.getSuperclass()
+        );
+    }
+
 }
