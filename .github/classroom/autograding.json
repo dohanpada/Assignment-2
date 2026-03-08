@@ -1,0 +1,104 @@
+{
+  "tests": [
+    {
+      "name": "Structure",
+      "setup": "mvn -B -q clean compile",
+      "run": "mvn -B -Dtest=workflow.StructureTests test",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 2,
+      "points": 8
+    },
+    {
+      "name": "Workflow",
+      "setup": "",
+      "run": "mvn -B -Dtest=workflow.WorkflowTests test",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 2,
+      "points": 2
+    },
+    {
+      "name": "Hidden: Move Command",
+      "setup": "javac -cp target/classes HiddenMoveTest.java",
+      "run": "java -cp target/classes:. HiddenMoveTest",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 2,
+      "points": 2
+    },
+    {
+      "name": "Hidden: Alter Command",
+      "setup": "javac -cp target/classes HiddenAlterFieldTest.java",
+      "run": "java -cp target/classes:. HiddenAlterFieldTest",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 2,
+      "points": 2
+    },
+    {
+      "name": "Hidden: Unique Ticket IDs",
+      "setup": "javac -cp target/classes HiddenUniqueIdTest.java",
+      "run": "java -cp target/classes:. HiddenUniqueIdTest",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 2,
+      "points": 3
+    },
+    {
+      "name": "Hidden: No Duplicate on Move",
+      "setup": "javac -cp target/classes HiddenNoDupTest.java",
+      "run": "java -cp target/classes:. HiddenNoDupTest",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 2,
+      "points": 3
+    },
+    {
+      "name": "Hidden: Command Sequence",
+      "setup": "javac -cp target/classes HiddenCommandSequence.java",
+      "run": "java -cp target/classes:. HiddenCommandSequence",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 2,
+      "points": 3
+    },
+    {
+      "name": "Hidden: Audit Log Integrity",
+      "setup": "javac -cp target/classes HiddenAuditTest.java",
+      "run": "java -cp target/classes:. HiddenAuditTest",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 2,
+      "points": 2
+    },
+    {
+      "name": "Hidden: Alter Title",
+      "setup": "javac -cp target/classes HiddenAlterTest.java",
+      "run": "java -cp target/classes:. HiddenAlterTest",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 2,
+      "points": 2
+    },
+    {
+      "name": "Hidden: Multiple Commands",
+      "setup": "javac -cp target/classes HiddenMultipleCommandsTest.java",
+      "run": "java -cp target/classes:. HiddenMultipleCommandsTest",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 2,
+      "points": 3
+    }
+  ]
+}
