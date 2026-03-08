@@ -240,4 +240,14 @@ jobs:
           HIDDEN_ALTER_RESULTS: "${{steps.hidden-alter.outputs.result}}"
           HIDDEN_MULT_RESULTS: "${{steps.hidden-multiple.outputs.result}}"
         with:
-          runners: "structure,workflow,hidden-move,hidden-alter-field,hidden-unique-ids,hidden-no-dup,hidden-sequence,hidden-audit,hidden-alter,hidden-multiple"
+          runners: >-
+            structure,
+            workflow,
+            hidden-move,
+            hidden-alter-field,
+            hidden-unique-ids,
+            hidden-no-dup,
+            hidden-sequence,
+            hidden-audit,
+            hidden-alter,
+            hidden-multiple
