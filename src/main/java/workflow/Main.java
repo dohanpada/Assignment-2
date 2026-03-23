@@ -4,7 +4,7 @@ import workflow.*;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class Main {/sdfghjk
 
     private static final Scanner       scanner = new Scanner(System.in);
     private static final WorkflowBoard board   = new WorkflowBoard();
